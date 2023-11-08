@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <title>Estadísticas de Empleados</title>
+    <!-- Incluye la librería Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <meta charset="UTF-8">
+    <title>Graficas/Metricas de Empleados</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            text-align: center;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        .tab-button {
+            background-color: #DA2DE8;
+            color: #fff;
+            padding: 20px 40px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+        .tab-button:hover {
+            background-color: #6A1F70;
+        }
+        .tab-content {
+            display: none;
+            margin: 20px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f0f0f0;
+        }
+        form {
+            margin: 20px;
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 8px;
+            width: 40%;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #5CD940;
+            color: #fff;
+            padding: 20px 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #347C24;
+        }
+        .select {
+            width: 100%;
+            padding: 9px;
+            border: 1px solid #5F5F5F;
+            border-radius: 1px;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 14px;
+        }
+        .bottom-right {
+            position: fixed;
+            bottom: 10px; /* Ajusta la distancia desde la parte inferior según tus necesidades */
+            right: 10px; /* Ajusta la distancia desde la derecha según tus necesidades */
+        }
+    </style>
+</head>
+<body>
+<h1>Graficas/Metricas de Empleados</h1>
+<div class="tabs">
+    <button class="tab-button" onclick="openTab('salaryHistogramChart')">Histograma de Salario</button>
+    <button class="tab-button" onclick="openTab('employeesPerCompanyChart')"># Empleados por empresa</button>
+    <button class="tab-button" onclick="openTab('averageSalaryPerCompanyChart')">Salario promedio por empresa</button>
+    <button class="tab-button" onclick="openTab('salaryExpensesByCompanyChart')">Gastos en salario de las empresas</button>
+    <button class="tab-button" onclick="openTab('personsByGenderChart')">Persona por sexo en la base de datos</button>
+</div>
+
+<div class="tab-content" id="salaryHistogramChart">
+    <!-- Contenido del Histograma de Salario -->
+</div>
+<div class="tab-content" id="employeesPerCompanyChart">
+    <!-- Contenido de # Empleados por empresa -->
+</div>
+<div class="tab-content" id="averageSalaryPerCompanyChart">
+    <!-- Contenido de Salario promedio por empresa -->
+</div>
+<div class="tab-content" id="salaryExpensesByCompanyChart">
+    <!-- Contenido de Gastos en salario de las empresas -->
+</div>
+<div class="tab-content" id="personsByGenderChart">
+    <!-- Contenido de Persona por sexo en la base de datos -->
+</div>
+<div class="bottom-right" >
+    <form th:action="@{/employees}" method="get" >
+        <button type="submit">Regresar</button>
+    </form>
+</div>
+
+<form th:action="@{/graficas/creates}" method="get" >
+    <label for="num">Numero de empleados a crear Automatico:*</label>
+    <input type="number" id="num" name="num" required><br>
+    <button type="submit">Crear Empleados Automatico</button>
+</form>
+<script>
+    google.charts.load('current', { 'packages': ['corechart'] });
+
+    // Funciones para cargar y mostrar gráficos
+function loadSalaryHistogram() {
+    // Llama a la API para obtener datos del Histograma de Salario y dibuja el gráfico
+    // Reemplaza 'data' y 'options' con tus datos reales
+    var data = google.visualization.arrayToDataTable([
+        ['Rango de Salario', 'Número de Empleados'],
+        ['999', 5],
+        ['1999', 8],
+        ['2999', 12],
+        ['3999', 4],
+        // ... Agrega más rangos y datos según tus necesidades
+    ]);
+    var options = {
+        title: 'Histograma de Salario',
+        legend: { position: 'none' }, // Oculta la leyenda
+        hAxis: { title: 'Salarios' },
+        vAxis: { title: 'Número de Empleados' }
+    };
+    var chart = new google.visualization.ColumnChart(document.getElementById('salaryHistogramChart'));
+    chart.draw(data, options);
+}
+
+
+    function loadEmployeesPerCompany() {
+        // Llama a la API para obtener datos del Número de Empleados por Empresa y dibuja el gráfico
+        // Reemplaza 'data' y 'options' con tus datos reales
+        var data = google.visualization.arrayToDataTable([
+            ['Empresa', 'Número de Empleados'],
+            ['Empresa A', 10],
+            ['Empresa B', 15],
+            ['Empresa C', 20],
+            // ... Agrega más datos según tu necesidad
+        ]);
+        var options = {
+            title: '# Empleados por empresa',
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('employeesPerCompanyChart'));
+        chart.draw(data, options);
+    }
+
+    function loadAverageSalaryPerCompany() {
+        // Llama a la API para obtener datos del Salario Promedio por Empresa y dibuja el gráfico
+        // Reemplaza 'data' y 'options' con tus datos reales
+        var data = google.visualization.arrayToDataTable([
+            ['Empresa', 'Salario Promedio'],
+            ['Empresa A', 2500],
+            ['Empresa B', 2800],
+            ['Empresa C', 3000],
+            // ... Agrega más datos según tu necesidad
+        ]);
+        var options = {
+            title: 'Salario promedio por empresa',
+        };
+        var chart = new google.visualization.BarChart(document.getElementById('averageSalaryPerCompanyChart'));
+        chart.draw(data, options);
+    }
+
+    function loadSalaryExpensesByCompany() {
+        // Llama a la API para obtener datos de Gastos en salario de Empresas y dibuja el gráfico
+        // Reemplaza 'data' y 'options' con tus datos reales
+        var data = google.visualization.arrayToDataTable([
+            ['Empresa', 'Gastos en Salario'],
+            ['Empresa A', 25000],
+            ['Empresa B', 35000],
+            ['Empresa C', 40000],
+            // ... Agrega más datos según tu necesidad
+        ]);
+        var options = {
+            title: 'Gastos en salario de las empresas',
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('salaryExpensesByCompanyChart'));
+        chart.draw(data, options);
+    }
+    function loadPersonsByGender() {
+        // Llama a la API para obtener datos de Personas por Sexo y dibuja el gráfico
+        // Reemplaza 'data' y 'options' con tus datos reales
+        var data = google.visualization.arrayToDataTable([
+            ['Sexo', 'Número de Personas'],
+            ['Masculino', 30],
+            ['Femenino', 25],
+            ['Intersexual', 5],
+            ['No Especificado', 10],
+            // ... Agrega más datos según tu necesidad
+        ]);
+        var options = {
+            title: 'Personas por Sexo',
+        };
+        var chart = new google.visualization.PieChart(document.getElementById('personsByGenderChart'));
+        chart.draw(data, options);
+    }
+
+    function openTab(tabName) {
+        var tabs = document.getElementsByClassName('tab-content');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].style.display = 'none';
+        }
+        document.getElementById(tabName).style.display = 'block';
+
+        // Llama a la función de carga de gráficos correspondiente al abrir una pestaña
+        switch (tabName) {
+            case 'salaryHistogramChart':
+                loadSalaryHistogram();
+                break;
+            case 'employeesPerCompanyChart':
+                loadEmployeesPerCompany();
+                break;
+            case 'averageSalaryPerCompanyChart':
+                loadAverageSalaryPerCompany();
+                break;
+            case 'salaryExpensesByCompanyChart':
+                loadSalaryExpensesByCompany();
+                break;
+            case 'personsByGenderChart':
+                loadPersonsByGender();
+                break;
+        }
+    }
+</script>
+</body>
+</html>

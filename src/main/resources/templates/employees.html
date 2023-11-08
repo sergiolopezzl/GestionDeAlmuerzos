@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Empleados</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .tab {
+            display: none;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 70%;
+        }
+        th, td {
+            border: 2px solid #ccc;
+            padding: 10px;
+        }
+        th {
+            background-color: #f0f0f0;
+            text-align: left;
+        }
+        form {
+            margin: 20px;
+            text-align: center;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            padding: 8px;
+            width: 40%;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #5CD940;
+            color: #fff;
+            padding: 20px 30px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 10px; /* Redondear los botones */
+        }
+        button:hover {
+            background-color: #347C24;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px;
+        }
+        .tab-button {
+            background-color: #DA2DE8;
+            color: #fff;
+            padding: 20px 40px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 10px; /* Redondear los botones */
+        }
+        .tab-button:hover {
+            background-color: #6A1F70;
+        }
+        .label {
+            padding: 7px;
+        }
+        /* Estilo para el menú desplegable */
+        .select {
+            width: 724px;
+            padding: 9px;
+            border: 1px solid #5F5F5F;
+            border-radius: 1px;
+            background-color: #f9f9f9;
+            color: #333;
+            font-size: 14px;
+        }
+        .bottom-right {
+            position: fixed;
+            bottom: 10px; /* Ajusta la distancia desde la parte inferior según tus necesidades */
+            right: 10px; /* Ajusta la distancia desde la derecha según tus necesidades */
+        }
+    </style>
+</head>
+<body>
+
+
+<h1>Gestión de Empleados</h1>
+<div class="tabs">
+    <button class="tab-button" onclick="openTab('lista')">Lista de Empleados</button>
+    <button class="tab-button" onclick="openTab('crear')">Crear Empleado</button>
+    <button class="tab-button" onclick="openTab('actualizarna')">Actualizar Empleado</button>
+    <button class="tab-button" onclick="openTab('eliminar')">Eliminar Empleado</button>
+
+</div>
+<form th:action="@{/employees/creates}" method="get" >
+    <label for="num">Numero de empleados a crear Automatico:*</label>
+    <input type="number" id="num" name="num" required><br>
+    <button type="submit">Crear Empleados Automatico</button>
+</form>
+<div id="lista" class="tab">
+    <table>
+
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Sexo Biologico</th>
+            <th>Rol</th>
+            <th>Salario</th>
+            <th>Empresa</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employeeList}">
+            <td th:text="${employee.employeeId}"></td>
+            <td th:text="${employee.firstName}"></td>
+            <td th:text="${employee.lastName}"></td>
+            <td th:text="${employee.sexoBiologico}"></td>
+            <td th:text="${employee.role}"></td>
+            <td th:text="${employee.salary}"></td>
+            <td th:text="${employee.idEmpresa}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h2>Tabla de Cantidad por Sexo</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Sexo</th>
+            <th>Cantidad</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Masculino</td>
+            <td th:text="${sumaMasculino}"></td>
+        </tr>
+        <tr>
+            <td>Femenino</td>
+            <td th:text="${sumaFemenino}"></td>
+        </tr>
+        <tr>
+            <td>Intersexual</td>
+            <td th:text="${sumaIntersexual}"></td>
+        </tr>
+        <tr>
+            <td>No Especificado</td>
+            <td th:text="${sumaNoEspecificado}"></td>
+        </tr>
+        <tr>
+            <td>Promedio de salarios</td>
+            <td th:text="${sumaTotal}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+</div>
+<div id="crear" class="tab">
+    <h1>Crear Empleado</h1>
+    <form th:action="@{/employees/create}" method="post" onsubmit="return confirm('¿Está seguro de que desea crear un empleado?')">
+        <label for="employeeId">ID del Empleado:*</label>
+        <input type="number" id="employeeId" name="employeeId" required><br>
+
+        <label for="firstName">Nombre del Empleado:*</label>
+        <input type="text" id="firstName" name="firstName" required><br>
+
+        <label for="lastName">Apellido del Empleado:*</label>
+        <input type="text" id="lastName" name="lastName" required><br>
+
+        <label for="sexoBiologico">Sexo Biológico del Empleado:*</label>
+        <select id="sexoBiologico" name="sexoBiologico" required class="select">
+            <option value="">Seleccionar opción</option> <!-- Opción de sin selección -->
+            <option value="MASCULINO">Masculino</option>
+            <option value="FEMENINO">Femenino</option>
+            <option value="INTERSEXUAL">Intersexual</option>
+            <option value="NO_ESPECIFICADO">No Especificado</option>
+        </select><br>
+
+        <label for="role" class="label">Rol del Empleado:*</label>
+        <input type="text" id="role" name="role" required><br>
+
+        <label for="salary">Salario del Empleado:*</label>
+        <input type="number" id="salary" name="salary" required><br>
+
+        <label for="idEmpresa">Empresa del Empleado:*</label>
+        <input type="number" id="idEmpresa" name="idEmpresa" required><br>
+
+        <button type="submit">Crear Empleado</button>
+    </form>
+</div>
+
+<div id="actualizarna" class="tab">
+    <h1>Escriba SOLO los atributos que desea actualizar del Empleado</h1>
+    <form th:action="@{/employees/update}" method="post" onsubmit="return confirm('¿Está seguro de que desea actualizar al empleado?')">
+        <label for="employeeIud">ID del Empleado YA EXISTENTE para actualizar:*</label>
+        <input type="number" id="employeeIud" name="employeeId" required><br>
+
+        <label for="firstNameud">Actualiza Nombre del Empleado:</label>
+        <input type="text" id="firstNameud" name="firstName" ><br>
+
+        <label for="lastNameud">Actualiza Apellido del Empleado:</label>
+        <input type="text" id="lastNameud" name="lastName" ><br>
+
+        <label for="sexoBiologicoud">Sexo Biológico del Empleado:</label>
+        <select id="sexoBiologicoud" name="sexoBiologico" class="select">
+            <option value="">Seleccionar opción</option> <!-- Opción de sin selección -->
+            <option value="MASCULINO">Masculino</option>
+            <option value="FEMENINO">Femenino</option>
+            <option value="INTERSEXUAL">Intersexual</option>
+            <option value="NO_ESPECIFICADO">No Especificado</option>
+        </select><br>
+
+        <label for="roleud" class="label">Actualiza Rol del Empleado:</label>
+        <input type="text" id="roleud" name="role" ><br>
+
+        <label for="salaryud">Actualiza Salario del Empleado:</label>
+        <input type="number" id="salaryud" name="salary" ><br>
+
+        <label for="idEmpresaud">Actualiza Empresa del Empleado:</label>
+        <input type="number" id="idEmpresaud" name="idEmpresa" ><br>
+
+        <button type="submit">Actualizar empleado</button>
+    </form>
+</div>
+
+<div id="eliminar" class="tab">
+    <h1>Actualizar Empleado</h1>
+    <form th:action="@{/employees/delete}" method="post" onsubmit="return confirm('¿Está seguro de que desea eliminar el empleado?')">
+        <label for="employeeIdel">ID del Empleado YA EXISTENTE para eliminar:*</label>
+        <input type="text" id="employeeIdel" name="employeeId" required><br>
+
+        <button type="submit">Eliminar Empleado</button>
+    </form>
+</div>
+<div class="bottom-right">
+    <form th:action="@{/graficas}" method="get">
+        <button type="submit">Ir a gráficas</button>
+    </form>
+</div>
+
+
+<script>
+    function openTab(tabName) {
+        var tabs = document.getElementsByClassName('tab');
+        for (var i = 0; i < tabs.length; i++) {
+            tabs[i].style.display = 'none';
+        }
+        document.getElementById(tabName).style.display = 'block';
+    }
+</script>
+</body>
+</html>
