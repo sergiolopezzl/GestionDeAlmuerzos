@@ -32,12 +32,11 @@ public class InsumoController {
     public String createInsumo(
             @RequestParam String nombre,
             @RequestParam String tipo,
-            @RequestParam int cantidad,
-            @RequestParam double precio
+            @RequestParam String cantidad,
+            @RequestParam String precio
 
     ) {
-        Insumo insumo = new Insumo(nombre, tipo, cantidad, precio, new Date(19991129));
-        insumoService.createInsumo(insumo);
+        insumoService.createInsumo(nombre, tipo, cantidad, precio);
         return "redirect:/inventario"; // Redirige a la página de lista de insumos después de la creación.
     }
 
@@ -48,9 +47,15 @@ public class InsumoController {
         return "edit-insumo"; // Nombre de la vista para editar un insumo existente.
     }
 
-    @PostMapping("/inventario/edit")
-    public String updateInsumo(@ModelAttribute Insumo insumo) {
-        insumoService.updateInsumo(insumo);
+    @PostMapping("/inventario/edit/{insumoId}")
+    public String updateInsumo(
+            @RequestParam Long insumoId,
+            @RequestParam String nombre,
+            @RequestParam String tipo,
+            @RequestParam String cantidad,
+            @RequestParam String precio
+    ) {
+        insumoService.updateInsumo(insumoId, nombre, tipo, cantidad, precio);
         return "redirect:/inventario"; // Redirige a la página de lista de insumos después de la actualización.
     }
 

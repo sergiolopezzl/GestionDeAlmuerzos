@@ -1,7 +1,6 @@
 package co.edu.escuelaing.cvds.project.service;
 
 import co.edu.escuelaing.cvds.project.model.Employee;
-import co.edu.escuelaing.cvds.project.model.Empresa;
 import co.edu.escuelaing.cvds.project.model.SexoBiologico;
 import co.edu.escuelaing.cvds.project.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
