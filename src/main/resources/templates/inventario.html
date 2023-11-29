@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Gestión del Inventario</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Agregar los enlaces a las hojas de estilo de Bootstrap y jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -41,9 +38,9 @@
         </div>
     </div>
 </nav>
+
 <div class="container mt-5">
     <h1 class="text-center">Gestión del Inventario</h1>
-
     <div class="row">
         <div class="col-9">
             <!-- Tabla para mostrar la lista de insumos -->
@@ -68,21 +65,19 @@
                     <td th:text="${insumo.precio}"></td>
                     <td th:text="${#dates.format(insumo.fechaVencimiento, 'dd-MM-yyyy')}"></td>
                     <td>
+                        <!-- Botón "Editar" -->
                         <a href="#" class="btn btn-info btn-sm edit-button" data-toggle="modal" data-target="#editInsumoModal" data-id="${insumo.insumoId}">Editar</a>
-                        <a href="#" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteInsumoModal">Eliminar</a>
+                        <!-- Botón "Eliminar" -->
+                        <a href="#" class="btn btn-danger btn-sm delete-button" data-toggle="modal" data-target="#deleteInsumoModal" data-id="${insumo.insumoId}">Eliminar</a>
+
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
-
-
-
         <div class="col-3">
-            <!-- Botón para abrir/cerrar el panel de creación de insumos -->
-            <div class="col-3">
-                <button class="btn btn-primary" onclick="openTab('createPanel')">Agregar Insumo</button>
-            </div>
+            <!-- Botón para abrir el panel de creación de insumos -->
+            <button class="btn btn-primary" onclick="openTab('createPanel')">Agregar Insumo</button>
             <!-- Panel de creación de insumos (inicialmente oculto) -->
             <div id="createPanel" class="tab" style="display: none;">
                 <!-- Formulario para crear un nuevo insumo -->
@@ -112,7 +107,7 @@
                         </div>
                         <div class="form-group">
                             <label for="fechaVencimiento">Fecha de Vencimiento</label>
-                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento" >
+                            <input type="date" class="form-control" id="fechaVencimiento" name="fechaVencimiento">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -121,7 +116,7 @@
                     </div>
                 </form>
             </div>
-
+            <!-- Panel de edición de insumos (inicialmente oculto) -->
             <div id="editPanel" class="tab" style="display: none;">
                 <!-- Formulario para editar un insumo -->
                 <form action="/inventario/edit" method="post">
@@ -166,7 +161,6 @@
         </div>
     </div>
 </div>
-
 <!-- Agrega el código JavaScript para controlar el botón y el panel -->
 <script>
     function openTab(tabName) {
@@ -176,12 +170,33 @@
         }
         document.getElementById(tabName).style.display = 'block';
     }
-</script>
-<script>
+
     $(document).ready(function () {
         $(".edit-button").click(function () {
             var insumoId = $(this).data("id");
             $("#insumoId2").val(insumoId);
+        });
+    });
+
+    $(document).ready(function () {
+        // Maneja el clic en el botón de "Editar"
+        $(".edit-button").click(function () {
+            var insumoId = $(this).data("id");
+            // Aquí puedes realizar cualquier acción que desees antes de abrir el modal de edición.
+            // Si no necesitas realizar ninguna acción adicional, puedes omitir esta parte.
+
+            // Abre el modal de edición
+            $('#editInsumoModal').modal('show');
+        });
+
+        // Maneja el clic en el botón de "Eliminar"
+        $(".delete-button").click(function () {
+            var insumoId = $(this).data("id");
+            // Aquí puedes realizar cualquier acción que desees antes de abrir el modal de eliminación.
+            // Si no necesitas realizar ninguna acción adicional, puedes omitir esta parte.
+
+            // Abre el modal de eliminación
+            $('#deleteInsumoModal').modal('show');
         });
     });
 </script>

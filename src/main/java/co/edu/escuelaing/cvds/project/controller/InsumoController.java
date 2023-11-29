@@ -49,7 +49,7 @@ public class InsumoController {
 
     @PostMapping("/inventario/edit/{insumoId}")
     public String updateInsumo(
-            @RequestParam Long insumoId,
+            @PathVariable Long insumoId,
             @RequestParam String nombre,
             @RequestParam String tipo,
             @RequestParam String cantidad,
